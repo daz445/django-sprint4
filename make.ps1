@@ -5,6 +5,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $venvPath = ".\venv\Scripts\Activate.ps1"
+$env:PYTHONUNBUFFERED = "1"
 
 function Invoke-InVenv {
     param([scriptblock]$ScriptBlock)
@@ -35,10 +36,11 @@ function Invoke-Lint {
 }
 
 function Start-Server {
-    Write-Host "Starting server..." -ForegroundColor Green
+    Write-Host "Starting server at http://127.0.0.1:8000/ ..." -ForegroundColor Green
     & $venvPath
     Set-Location blogicum
-    python manage.py runserver
+    $ErrorActionPreference = "Continue"
+    python manage.py runserver 2>&1
     Set-Location ..
 }
 
